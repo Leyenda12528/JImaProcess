@@ -165,7 +165,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         }
         return null;
     }//fin deñ metodo cargar imagen
-
+        
     /**
      * metodo que carga la imagen al bufferedImagen ajustando el tamaño de la
      * ventana

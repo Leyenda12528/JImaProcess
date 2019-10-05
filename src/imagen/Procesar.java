@@ -7,6 +7,10 @@ package imagen;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -16,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public class Procesar extends javax.swing.JFrame {
 
-    imagen obj = new imagen();
+    private imagen obj = new imagen();
 
     /**
      * Creates new form Procesar
@@ -44,10 +48,10 @@ public class Procesar extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblPaciente = new javax.swing.JLabel();
+        lblEdad = new javax.swing.JLabel();
+        lblDoctor = new javax.swing.JLabel();
+        lblLugar = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -135,24 +139,22 @@ public class Procesar extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel4.getAccessibleContext().setAccessibleName("Rotación");
-
         jPanel2.setBackground(new java.awt.Color(51, 51, 51));
 
         jPanel3.setBackground(new java.awt.Color(51, 51, 51));
         jPanel3.setForeground(new java.awt.Color(204, 255, 204));
 
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Paciente: ");
+        lblPaciente.setForeground(new java.awt.Color(255, 255, 255));
+        lblPaciente.setText("Paciente: ");
 
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Edad:");
+        lblEdad.setForeground(new java.awt.Color(255, 255, 255));
+        lblEdad.setText("Edad:");
 
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Doctor:");
+        lblDoctor.setForeground(new java.awt.Color(255, 255, 255));
+        lblDoctor.setText("Doctor:");
 
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Lugar:");
+        lblLugar.setForeground(new java.awt.Color(255, 255, 255));
+        lblLugar.setText("Lugar:");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -161,23 +163,23 @@ public class Procesar extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel2))
+                    .addComponent(lblLugar)
+                    .addComponent(lblDoctor)
+                    .addComponent(lblEdad)
+                    .addComponent(lblPaciente))
                 .addContainerGap(229, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(lblPaciente)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(lblEdad)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(lblDoctor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
+                .addComponent(lblLugar)
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
@@ -261,13 +263,14 @@ public class Procesar extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+        ///     ABRIENDO ARCHIVO
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         try {
             //llamada del metodo cargar imagen
             obj.cargaImag();
             obj.setVisible(true);
+            //obtener ruta            
             ShowOriginal();
         } catch (Exception e) {
             System.out.println("");
@@ -370,10 +373,6 @@ public class Procesar extends javax.swing.JFrame {
     private javax.swing.JSlider filtro_manual;
     private javax.swing.JButton girar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
@@ -385,10 +384,43 @@ public class Procesar extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblDoctor;
+    private javax.swing.JLabel lblEdad;
+    private javax.swing.JLabel lblLugar;
+    private javax.swing.JLabel lblPaciente;
     // End of variables declaration//GEN-END:variables
     public void ShowOriginal() {
-        ImageIcon icon = new ImageIcon(obj.RutaFull);
-        icon = new ImageIcon(icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
-        jLabel1.setIcon(icon);
+        try {
+            //cargar imagen en la 1º ventana
+            ImageIcon icon = new ImageIcon(obj.RutaFull);
+            icon = new ImageIcon(icon.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
+            jLabel1.setIcon(icon);
+            //mostrando informacion "" dicom
+            String[] parte = obj.RutaFull.split("\\.");
+            String Rutatxt = parte[0];
+            Rutatxt += ".txt";
+            //System.out.println("" + Rutatxt);
+
+            File txt = new File(Rutatxt);
+            BufferedReader br = new BufferedReader(new FileReader(txt));
+
+            String line;
+            String[] lines;
+            String[] lines2 = new String[4];
+            int i = 0;
+            while ((line = br.readLine()) != null) {
+                lines = line.split(":");
+                lines2[i] = lines[1];
+                //System.out.println("" + line);
+                i++;
+            }
+            lblPaciente.setText(lblPaciente.getText() + lines2[0]);
+            lblEdad.setText(lblEdad.getText() + lines2[1]);
+            lblDoctor.setText(lblDoctor.getText() + lines2[2]);
+            lblLugar.setText(lblLugar.getText() + lines2[3]);
+
+        } catch (Exception e) {
+            System.out.println("" + e);
+        }
     }
 }

@@ -24,10 +24,7 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author yuriani
- * @author Francisco Aguilar
- * @author Maricarmen Santos
- * @author Ivan luis Jimenez
+ * @author jorge
  */
 public class RecortarImagen extends JLabel implements MouseMotionListener, MouseListener {
 
@@ -114,11 +111,9 @@ public class RecortarImagen extends JLabel implements MouseMotionListener, Mouse
         recortar();
         try {
             //se escribe en disco            
-            ImageIO.write(ImagenR, formato, f);
-           /*Mensaje*/
-           //mos_msj("Se guardó correctamente");
+            ImageIO.write(ImagenR, formato, f);                      
         } catch (IOException e) {
-            //mos_msj("No se pudo guardar");
+            System.out.println("No se guardo - "+e);
         }
     }
 

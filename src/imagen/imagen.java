@@ -27,17 +27,9 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author yuriani
- * @author Francisco Aguilar
- * @author Maricarmen Santos
- * @author Ivan luis Jimenez
+ * @author jorge
  */
 public class imagen extends javax.swing.JFrame implements ActionListener {
-
-    /**
-     *  crea un un objeto de otra clase llada RecortarImagen
-     */
-    //RecortarImagen recorte;
 
     /**
      * variables globales de tipó bufferedImagen y variables de tipo entero.
@@ -75,15 +67,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         x1 = x;
         y1 = y;
     }
-
-    /**
-     * arreglo estatico de tipo flotante para filtro sharpening
-     */
-    public static final float[] SHARPEN3x3 = {
-        0.f, -1.f, 0.f,
-        -1.f, 5.f, -1.f,
-        0.f, -1.f, 0.f
-    };
+    
     /**
      * arreglo estatico de tipo flotante para filtro detectar bordes
      */
@@ -92,14 +76,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         -1.0f, 4.0f, -1.0f,
         0.0f, -1.0f, 0.0f
     };
-    /**
-     * arreglo estatico de tipo flotante para filtro low-pass
-     */
-    public static final float[] BLUR3x3 = {
-        0.1f, 0.1f, 0.1f,
-        0.1f, 0.2f, 0.1f,
-        0.1f, 0.1f, 0.1f
-    };
+    
     //variable estatica tipo short
     public static final short col = 256;
     /**
@@ -112,38 +89,8 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             coloresInvertidos[i] = (short) ((col - 1) - i);
         }
     }
-    /**
-     * Arreglo para el eliminar el color rojo
-     */
-    static final short[] coloresSinInvertir_r = new short[col];
-    static final short[] cr_cero = new short[col];
-
-    /*Guarda azul*/
-    static short[][] elimina_rojo = {
-        cr_cero, coloresSinInvertir_r, coloresSinInvertir_r};
-
-    static {
-        for (int i = 0; i < col; i++) {
-            coloresSinInvertir_r[i] = (short) (i);
-            coloresInvertidos[i] = (short) ((col - 1) - i);
-            cr_cero[i] = 0;
-        }
-    }
-
-    /*Guarda rojo*/
-    static short[][] elimina_azul = {
-        coloresSinInvertir_r, cr_cero, coloresSinInvertir_r};
-
-    /*Guarda Amarillo*/
-    static short[][] elimina_verde = {
-        coloresSinInvertir_r, coloresSinInvertir_r, cr_cero};
-
-
-    /*Para ajuste de brillo*/
-    public static float p = (float) 2;
-    static final float[] componentes = {p, p, p};
-    static final float[] desplazamientos = {0.0f, 0.0f, 0.0f};
-
+    
+    
     /**
      * Metodo para abrir la imagen con JfileChooser
      *
@@ -210,28 +157,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 /*Detecta bordes*/
                 float[] data1 = valores;
                 destino = new ConvolveOp(new Kernel(3, 3, data1), ConvolveOp.EDGE_NO_OP, null);
-                break;
-            case 11:
-                /* aumenta escala usando transform Op e interpolacion BICUBIC */
-                AffineTransform at = AffineTransform.getScaleInstance(x1, y1);
-                destino = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-                break;
-            case 12:
-            /* low pass filter */
-            case 13:
-                /* sharpen */
-                float[] data = (opcion == 12) ? BLUR3x3 : SHARPEN3x3;
-                destino = new ConvolveOp(new Kernel(3, 3, data), ConvolveOp.EDGE_NO_OP, null);
-                break;
-            case 14:
-                /* lookup */
-                byte lut[] = new byte[256];
-                for (int j = 0; j < 256; j++) {
-                    lut[j] = (byte) (256 - j);
-                }
-                ByteLookupTable blut = new ByteLookupTable(0, lut);
-                destino = new LookupOp(blut, null);
-                break;
+                break;            
             default:
         }
         try {
@@ -246,7 +172,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     /**
      * metetodo que pinta sobre el panel
      *
-     * @param g variable de tipo graphics
      */
     @Override
     public void paint(Graphics g) {
@@ -257,56 +182,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 /*Imagen Original*/
                 imagen_filtro = imagen;
                 g.drawImage(imagen, 0, 0, null);
-                break;
-            case 1:
-                /*Azul*/
-                LookupTable azul = new ShortLookupTable(0, elimina_rojo);
-                LookupOp az = new LookupOp(azul, null);
-                imagen_filtro = az.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 2:
-                /*Brillo*/
-                RescaleOp rop2 = new RescaleOp(componentes, desplazamientos, null);
-                imagen_filtro = rop2.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 3:
-                /*Gris*/
-                ColorConvertOp ccop = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-                imagen_filtro = ccop.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 4:
-                /*Girar*/
-                double r = Math.toRadians(grados); //se convierte a radianes lo grados
-                AffineTransform a = new AffineTransform();
-                a.rotate(r, this.getWidth() / 2, this.getHeight() / 2); //se asigna el angulo y centro de rotacion
-                ((Graphics2D) g).setTransform(a);
-                g.drawImage(imagen_filtro, 0, 0, this);
-                break;
-            case 5:
-                /*Amarillo*/
-                LookupTable amarillo = new ShortLookupTable(0, elimina_verde);
-                LookupOp ye = new LookupOp(amarillo, null);
-                imagen_filtro = ye.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 6:
-                /*Filtro Rojo*/
-                LookupTable rojo = new ShortLookupTable(0, elimina_azul);
-                LookupOp ro = new LookupOp(rojo, null);
-                imagen_filtro = ro.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 7:
-                /*Efecto Espejo*/
-                AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-                tx.translate(-copia.getWidth(null), 0);
-                AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-                imagen_filtro = op.filter(imagen_filtro, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
+                break;            
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
                 agrega_filtro();
@@ -320,8 +196,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      * llamando los metodos rotar y translacion final de la clase transformar
      * imagen
      *
-     * @param grados variable de tipo double
-     * @return devuelve un objeto de tipo buffered imagen
      */
     public BufferedImage rotacionImagen(double grados) {
         //crea un objeto  transformar de la clase transformar imagen
@@ -371,34 +245,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     public BufferedImage getBi() {
         return imagen_filtro;
     }
-/**
- * metodo que recorta una parte de la imagen
- */
-//    public void RecortarImagen() {
-//        recorte = new RecortarImagen(imagen_filtro);
-//        this.label.removeAll();
-//        this.label.add(recorte);
-//
-//        recorte.TamañoRecorte(design.TAncho.getValue());
-//        design.TAncho.setMaximum(imagen_filtro.getHeight());
-//
-//        this.label.repaint();
-//
-//    }
-/**
- * metodo que guarda el recorte 
- */
-//    public void GuardarRecorte() {
-//        String formato = (String) design.Formatos.getSelectedItem();
-//        File saveFile = new File("Recorte." + formato);
-//        JFileChooser chooser = new JFileChooser();
-//        chooser.setSelectedFile(saveFile);
-//        int rFormato = chooser.showSaveDialog(design.Formatos);
-//        if (rFormato == JFileChooser.APPROVE_OPTION) {
-//            saveFile = chooser.getSelectedFile();
-//            recorte.guardar_imagen(saveFile, formato);
-//        }
-//    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

@@ -320,10 +320,10 @@ public class Procesar extends javax.swing.JFrame {
 
         if (ac_filtro_manual.isSelected()) {
             filtro_manual.setEnabled(true);
-            //mos_msj("Giro manual ACTIVADO");
+            //Giro manual ACTIVADO
         } else {
             filtro_manual.setEnabled(false);
-            //mos_msj("Giro manual DESACTIVADO");
+            //"Giro manual DESACTIVADO
         }
     }//GEN-LAST:event_ac_filtro_manualActionPerformed
 

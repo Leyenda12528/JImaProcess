@@ -8,8 +8,7 @@ import java.awt.geom.Point2D;
 
 /**
  *
- * @author Francisco Aguilar
- * @author maricarmen etc.
+ * @author jorge
  */
 public class TransformarImagen {
 

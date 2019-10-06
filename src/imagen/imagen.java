@@ -27,10 +27,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author yuriani
- * @author Francisco Aguilar
- * @author Maricarmen Santos
- * @author Ivan luis Jimenez
+ * @author jorge
  */
 public class imagen extends javax.swing.JFrame implements ActionListener {
 

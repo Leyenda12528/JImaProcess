@@ -24,10 +24,7 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author yuriani
- * @author Francisco Aguilar
- * @author Maricarmen Santos
- * @author Ivan luis Jimenez
+ * @author jorge
  */
 public class RecortarImagen extends JLabel implements MouseMotionListener, MouseListener {
 

@@ -11,7 +11,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -45,6 +47,7 @@ public class Procesar extends javax.swing.JFrame {
         girar = new javax.swing.JButton();
         ac_filtro_manual = new javax.swing.JCheckBox();
         filtro_manual = new javax.swing.JSlider();
+        btnSave = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -122,13 +125,23 @@ public class Procesar extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        btnSave.setFont(new java.awt.Font("Palatino Linotype", 1, 14)); // NOI18N
+        btnSave.setText("Guardar");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSave, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -136,6 +149,8 @@ public class Procesar extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -310,7 +325,7 @@ public class Procesar extends javax.swing.JFrame {
             obj.rotacionImagen(90);
             obj.actualiza_frame();
             obj.repaint();
-            //mos_msj("Se giró la imagen");
+            //Se giró la imagen
         } catch (Exception e) {
             System.out.println("");
         }
@@ -332,6 +347,24 @@ public class Procesar extends javax.swing.JFrame {
         obj.Grados(filtro_manual.getValue());
         obj.r_efecto(4);
     }//GEN-LAST:event_filtro_manualStateChanged
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        try {
+
+            String formato = "png";
+            File saveFile = new File("NewImagen." + formato);
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(saveFile);
+            int rFormato = chooser.showSaveDialog(this);
+            if (rFormato == JFileChooser.APPROVE_OPTION) {
+                saveFile = chooser.getSelectedFile();
+                ImageIO.write(obj.getBi(), formato, saveFile);
+                //Se guardó exitosamente
+            }
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -370,6 +403,7 @@ public class Procesar extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ac_filtro_manual;
+    private javax.swing.JButton btnSave;
     private javax.swing.JSlider filtro_manual;
     private javax.swing.JButton girar;
     private javax.swing.JLabel jLabel1;

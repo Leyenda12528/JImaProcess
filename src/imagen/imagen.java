@@ -134,8 +134,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             }
             this.setSize(w, h);
         } catch (IOException e) {
-            //mos_msj("La imagen no se pudo leer");
-            //System.exit(1);
+            //la imagen no se pudo leer            
         }
     } //fin del metodo cargarimagen
 
@@ -259,7 +258,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
 
         label = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         label.setText("jLabel1");
 

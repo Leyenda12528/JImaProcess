@@ -350,20 +350,7 @@ public class Procesar extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // TODO add your handling code here:
-        try {
-
-            String formato = "png";
-            File saveFile = new File("NewImagen." + formato);
-            JFileChooser chooser = new JFileChooser();
-            chooser.setSelectedFile(saveFile);
-            int rFormato = chooser.showSaveDialog(this);
-            if (rFormato == JFileChooser.APPROVE_OPTION) {
-                saveFile = chooser.getSelectedFile();
-                ImageIO.write(obj.getBi(), formato, saveFile);
-                //Se guardó exitosamente
-            }
-        } catch (Exception e) {
-        }
+        save();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     /**
@@ -452,7 +439,7 @@ public class Procesar extends javax.swing.JFrame {
             lblEdad.setText("Edad: ");
             lblDoctor.setText("Doctor: ");
             lblLugar.setText("Lugar: ");
-            
+
             lblPaciente.setText(lblPaciente.getText() + lines2[0]);
             lblEdad.setText(lblEdad.getText() + lines2[1]);
             lblDoctor.setText(lblDoctor.getText() + lines2[2]);
@@ -460,6 +447,23 @@ public class Procesar extends javax.swing.JFrame {
 
         } catch (Exception e) {
             System.out.println("" + e);
+        }
+    }
+
+    private void save() {
+        try {
+
+            String formato = "png";
+            File saveFile = new File("NewImagen." + formato);
+            JFileChooser chooser = new JFileChooser();
+            chooser.setSelectedFile(saveFile);
+            int rFormato = chooser.showSaveDialog(this);
+            if (rFormato == JFileChooser.APPROVE_OPTION) {
+                saveFile = chooser.getSelectedFile();
+                ImageIO.write(obj.getBi(), formato, saveFile);
+                //Se guardó exitosamente
+            }
+        } catch (Exception e) {
         }
     }
 }

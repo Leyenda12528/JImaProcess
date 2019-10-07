@@ -67,7 +67,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         x1 = x;
         y1 = y;
     }
-    
+
     /**
      * arreglo estatico de tipo flotante para filtro detectar bordes
      */
@@ -76,7 +76,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         -1.0f, 4.0f, -1.0f,
         0.0f, -1.0f, 0.0f
     };
-    
+
     //variable estatica tipo short
     public static final short col = 256;
     /**
@@ -89,8 +89,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             coloresInvertidos[i] = (short) ((col - 1) - i);
         }
     }
-    
-    
+
     /**
      * Metodo para abrir la imagen con JfileChooser
      *
@@ -107,12 +106,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             ruta = file.getSelectedFile();
             RutaFull = file.getSelectedFile().getAbsolutePath();
             System.out.println(RutaFull);
-            
+
             return RutaFull;
         }
         return null;
     }//fin deñ metodo cargar imagen
-        
+
     /**
      * metodo que carga la imagen al bufferedImagen ajustando el tamaño de la
      * ventana
@@ -120,7 +119,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      */
     public void cargaImag() {
         try {
-            String url = agregar_imagen();            
+            String url = agregar_imagen();
             imagen = ImageIO.read(new File(url));
 
             w = imagen.getWidth(); // ancho
@@ -157,7 +156,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 /*Detecta bordes*/
                 float[] data1 = valores;
                 destino = new ConvolveOp(new Kernel(3, 3, data1), ConvolveOp.EDGE_NO_OP, null);
-                break;            
+                break;
             default:
         }
         try {
@@ -182,7 +181,15 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 /*Imagen Original*/
                 imagen_filtro = imagen;
                 g.drawImage(imagen, 0, 0, null);
-                break;            
+                break;
+            case 4:
+                /*Girar*/
+                double r = Math.toRadians(grados); //se convierte a radianes lo grados
+                AffineTransform a = new AffineTransform();
+                a.rotate(r, this.getWidth() / 2, this.getHeight() / 2); //se asigna el angulo y centro de rotacion
+                ((Graphics2D) g).setTransform(a);
+                g.drawImage(imagen_filtro, 0, 0, this);
+                break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
                 agrega_filtro();

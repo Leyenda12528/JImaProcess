@@ -414,6 +414,11 @@ public class Procesar extends javax.swing.JFrame {
                 //System.out.println("" + line);
                 i++;
             }
+            lblPaciente.setText("Paciente: ");
+            lblEdad.setText("Edad: ");
+            lblDoctor.setText("Doctor: ");
+            lblLugar.setText("Lugar: ");
+            
             lblPaciente.setText(lblPaciente.getText() + lines2[0]);
             lblEdad.setText(lblEdad.getText() + lines2[1]);
             lblDoctor.setText(lblDoctor.getText() + lines2[2]);

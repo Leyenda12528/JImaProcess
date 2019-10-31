@@ -190,6 +190,22 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 ((Graphics2D) g).setTransform(a);
                 g.drawImage(imagen_filtro, 0, 0, this);
                 break;
+            case 7:
+                /*Efecto Espejo Horizontal*/
+                AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+                tx.translate(-copia.getWidth(null), 0);
+                AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+                imagen_filtro = op.filter(imagen_filtro, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+                break;
+            case 8:
+                /*Efecto Espejo Horizontal*/
+                AffineTransform tx1 = AffineTransform.getScaleInstance(1, -1);                
+                tx1.translate(0, -copia.getHeight(null));
+                AffineTransformOp op1 = new AffineTransformOp(tx1, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+                imagen_filtro = op1.filter(imagen_filtro, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+                break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
                 agrega_filtro();

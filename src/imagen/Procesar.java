@@ -61,9 +61,11 @@ public class Procesar extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        btnNoneFiltro = new javax.swing.JMenuItem();
+        btnBordes = new javax.swing.JMenuItem();
+        btnNegativo = new javax.swing.JMenuItem();
+        btnEspejoHorizontal = new javax.swing.JMenuItem();
+        btnEspejoVertical = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -277,29 +279,45 @@ public class Procesar extends javax.swing.JFrame {
 
         jMenu2.setText("Filtro");
 
-        jMenuItem2.setText("Ninguno");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        btnNoneFiltro.setText("Ninguno");
+        btnNoneFiltro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                btnNoneFiltroActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        jMenu2.add(btnNoneFiltro);
 
-        jMenuItem3.setText("Borders");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        btnBordes.setText("Borders");
+        btnBordes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                btnBordesActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jMenu2.add(btnBordes);
 
-        jMenuItem4.setText("Negativo");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+        btnNegativo.setText("Negativo");
+        btnNegativo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
+                btnNegativoActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem4);
+        jMenu2.add(btnNegativo);
+
+        btnEspejoHorizontal.setText("Espejo Horizontal");
+        btnEspejoHorizontal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEspejoHorizontalActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnEspejoHorizontal);
+
+        btnEspejoVertical.setText("Espejo Vertical");
+        btnEspejoVertical.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEspejoVerticalActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnEspejoVertical);
 
         jMenuBar1.add(jMenu2);
 
@@ -336,32 +354,32 @@ public class Procesar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 //          FILTROS
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+    private void btnNoneFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoneFiltroActionPerformed
         // NINGUNO
         if (obj.isVisible()) {
             //seleccion NINGUN FILTRO
             obj.r_efecto(0);
             obj.repaint();
         }
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
+    }//GEN-LAST:event_btnNoneFiltroActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void btnBordesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBordesActionPerformed
         // TODO add your handling code here:
         if (obj.isVisible()) {
             //seleccion BORDERS
             obj.r_efecto(10);
             obj.repaint();
         }
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_btnBordesActionPerformed
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+    private void btnNegativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNegativoActionPerformed
         // TODO add your handling code here:
         if (obj.isVisible()) {
             //seleccion NEGATIVO
             obj.r_efecto(9);
             obj.repaint();
         }
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+    }//GEN-LAST:event_btnNegativoActionPerformed
 ////// Fin FILTROS
     private void girarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_girarActionPerformed
         try {
@@ -410,6 +428,24 @@ public class Procesar extends javax.swing.JFrame {
         obj.GuardarRecorte();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnEspejoHorizontalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEspejoHorizontalActionPerformed
+        // TODO add your handling code here:
+        if (obj.isVisible()) {
+            //seleccion Espejo Horizontal
+            obj.r_efecto(7);
+            obj.repaint();
+        }
+    }//GEN-LAST:event_btnEspejoHorizontalActionPerformed
+
+    private void btnEspejoVerticalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEspejoVerticalActionPerformed
+        // TODO add your handling code here:
+        if (obj.isVisible()) {
+            //seleccion Espejo Vertical
+            obj.r_efecto(8);
+            obj.repaint();
+        }
+    }//GEN-LAST:event_btnEspejoVerticalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -448,6 +484,11 @@ public class Procesar extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static final javax.swing.JSlider TAncho = new javax.swing.JSlider();
     private javax.swing.JCheckBox ac_filtro_manual;
+    private javax.swing.JMenuItem btnBordes;
+    private javax.swing.JMenuItem btnEspejoHorizontal;
+    private javax.swing.JMenuItem btnEspejoVertical;
+    private javax.swing.JMenuItem btnNegativo;
+    private javax.swing.JMenuItem btnNoneFiltro;
     private javax.swing.JButton btnSave;
     private javax.swing.JSlider filtro_manual;
     private javax.swing.JButton girar;
@@ -457,9 +498,6 @@ public class Procesar extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

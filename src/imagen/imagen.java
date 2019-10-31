@@ -39,6 +39,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     int w, h, opcion, grados = 0;
     double x1, y1;
     String RutaFull;
+    RecortarImagen recorte;
 
     /**
      * constructor de la clase
@@ -250,6 +251,36 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      */
     public BufferedImage getBi() {
         return imagen_filtro;
+    }
+
+    /**
+     * metodo que recorta una parte de la imagen
+     */
+    public void RecortarImagen() {
+        recorte = new RecortarImagen(imagen_filtro);
+        this.label.removeAll();
+        this.label.add(recorte);
+
+        recorte.TamañoRecorte(Procesar.TAncho.getValue());
+        Procesar.TAncho.setMaximum(imagen_filtro.getHeight());
+
+        this.label.repaint();
+
+    }
+
+    /**
+     * metodo que guarda el recorte
+     */
+    public void GuardarRecorte() {
+        String formato = "png";
+        File saveFile = new File("Recorte." + formato);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(saveFile);
+        int rFormato = chooser.showSaveDialog(null);
+        if (rFormato == JFileChooser.APPROVE_OPTION) {
+            saveFile = chooser.getSelectedFile();
+            recorte.guardar_imagen(saveFile, formato);
+        }
     }
 
     @SuppressWarnings("unchecked")

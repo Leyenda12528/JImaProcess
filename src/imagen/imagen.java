@@ -187,9 +187,8 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 /*Escala Gris*/
                 ColorConvertOp ccop = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
                 imagen_filtro = ccop.filter(imagen, null);
-                //imagen_Gris = imagen_filtro;
                 g.drawImage(imagen_filtro, 0, 0, null);
-                
+
                 break;
             case 4:
                 /*Girar*/
@@ -216,22 +215,21 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 g.drawImage(imagen_filtro, 0, 0, null);
                 break;
             case 12:
-
-                //float brightenFactor = 1.2f;
                 float brightenFactor = (float) contraste / 100;
-                System.out.println("" + brightenFactor);
-
+                //System.out.println("" + brightenFactor);
                 BufferedImageOp operacion = new RescaleOp(brightenFactor, 0, null);
                 imagen_filtro = operacion.filter(imagen_Gris, null);
                 g.drawImage(imagen_filtro, 0, 0, null);
-
-                System.out.println("CAMBIO Contraste");
+                //System.out.println("CAMBIO Contraste");
                 break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
                 agrega_filtro();
                 g.drawImage(imagen_filtro, 0, 0, null);
                 break;
+        }
+        if (opcion != 12) {
+            imagen_Gris = imagen_filtro;
         }
     }// fin de paint
 

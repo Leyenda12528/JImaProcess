@@ -182,6 +182,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 imagen_filtro = imagen;
                 g.drawImage(imagen, 0, 0, null);
                 break;
+            case 3:
+                /*Gris*/
+                ColorConvertOp ccop = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+                imagen_filtro = ccop.filter(imagen, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+                break;
             case 4:
                 /*Girar*/
                 double r = Math.toRadians(grados); //se convierte a radianes lo grados
@@ -200,7 +206,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 break;
             case 8:
                 /*Efecto Espejo Horizontal*/
-                AffineTransform tx1 = AffineTransform.getScaleInstance(1, -1);                
+                AffineTransform tx1 = AffineTransform.getScaleInstance(1, -1);
                 tx1.translate(0, -copia.getHeight(null));
                 AffineTransformOp op1 = new AffineTransformOp(tx1, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
                 imagen_filtro = op1.filter(imagen_filtro, null);

@@ -66,6 +66,7 @@ public class Procesar extends javax.swing.JFrame {
         btnNegativo = new javax.swing.JMenuItem();
         btnEspejoHorizontal = new javax.swing.JMenuItem();
         btnEspejoVertical = new javax.swing.JMenuItem();
+        btnGrises = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -319,6 +320,14 @@ public class Procesar extends javax.swing.JFrame {
         });
         jMenu2.add(btnEspejoVertical);
 
+        btnGrises.setText("Escala Grises");
+        btnGrises.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGrisesActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnGrises);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -446,6 +455,15 @@ public class Procesar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEspejoVerticalActionPerformed
 
+    private void btnGrisesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrisesActionPerformed
+        // TODO add your handling code here:
+        if (obj.isVisible()) {
+            //seleccion Escala Grises
+            obj.r_efecto(3);
+            obj.repaint();
+        }
+    }//GEN-LAST:event_btnGrisesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -487,6 +505,7 @@ public class Procesar extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnBordes;
     private javax.swing.JMenuItem btnEspejoHorizontal;
     private javax.swing.JMenuItem btnEspejoVertical;
+    private javax.swing.JMenuItem btnGrises;
     private javax.swing.JMenuItem btnNegativo;
     private javax.swing.JMenuItem btnNoneFiltro;
     private javax.swing.JButton btnSave;

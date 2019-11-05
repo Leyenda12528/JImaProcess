@@ -1,8 +1,5 @@
 package imagen;
 
-/**
- * importando las librerias
- */
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
@@ -25,8 +22,6 @@ public class TransformarImagen {
     /**
      * metodo que devuelve la altura y la anchura de la imagen
      *
-     * @param alturaImagen variable de tipo entero
-     * @param anchuraImagen variable de tipo entero
      */
     public TransformarImagen(int alturaImagen, int anchuraImagen) {
         trans = new AffineTransform();
@@ -37,7 +32,6 @@ public class TransformarImagen {
     /**
      * metodo que devuelve los grados
      *
-     * @param grados variable de tipo double
      */
     public void rotar(double grados) {
         this.grados = grados;

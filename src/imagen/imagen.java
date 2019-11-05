@@ -32,18 +32,14 @@ import javax.swing.JOptionPane;
 public class imagen extends javax.swing.JFrame implements ActionListener {
 
     /**
-     *  crea un un objeto de otra clase llada RecortarImagen
-     */
-    //RecortarImagen recorte;
-
-    /**
      * variables globales de tipó bufferedImagen y variables de tipo entero.
      *
      */
-    private BufferedImage imagen, imagen_filtro, copia;
-    int w, h, opcion, grados = 0;
+    private BufferedImage imagen, imagen_filtro, copia, imagen_Gris;
+    int w, h, opcion, grados = 0, contraste = 50;
     double x1, y1;
     String RutaFull;
+    RecortarImagen recorte;
 
     /**
      * constructor de la clase
@@ -74,14 +70,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     }
 
     /**
-     * arreglo estatico de tipo flotante para filtro sharpening
-     */
-    public static final float[] SHARPEN3x3 = {
-        0.f, -1.f, 0.f,
-        -1.f, 5.f, -1.f,
-        0.f, -1.f, 0.f
-    };
-    /**
      * arreglo estatico de tipo flotante para filtro detectar bordes
      */
     public static final float[] valores = {
@@ -89,14 +77,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
         -1.0f, 4.0f, -1.0f,
         0.0f, -1.0f, 0.0f
     };
-    /**
-     * arreglo estatico de tipo flotante para filtro low-pass
-     */
-    public static final float[] BLUR3x3 = {
-        0.1f, 0.1f, 0.1f,
-        0.1f, 0.2f, 0.1f,
-        0.1f, 0.1f, 0.1f
-    };
+
     //variable estatica tipo short
     public static final short col = 256;
     /**
@@ -109,37 +90,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             coloresInvertidos[i] = (short) ((col - 1) - i);
         }
     }
-    /**
-     * Arreglo para el eliminar el color rojo
-     */
-    static final short[] coloresSinInvertir_r = new short[col];
-    static final short[] cr_cero = new short[col];
-
-    /*Guarda azul*/
-    static short[][] elimina_rojo = {
-        cr_cero, coloresSinInvertir_r, coloresSinInvertir_r};
-
-    static {
-        for (int i = 0; i < col; i++) {
-            coloresSinInvertir_r[i] = (short) (i);
-            coloresInvertidos[i] = (short) ((col - 1) - i);
-            cr_cero[i] = 0;
-        }
-    }
-
-    /*Guarda rojo*/
-    static short[][] elimina_azul = {
-        coloresSinInvertir_r, cr_cero, coloresSinInvertir_r};
-
-    /*Guarda Amarillo*/
-    static short[][] elimina_verde = {
-        coloresSinInvertir_r, coloresSinInvertir_r, cr_cero};
-
-
-    /*Para ajuste de brillo*/
-    public static float p = (float) 2;
-    static final float[] componentes = {p, p, p};
-    static final float[] desplazamientos = {0.0f, 0.0f, 0.0f};
 
     /**
      * Metodo para abrir la imagen con JfileChooser
@@ -157,12 +107,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
             ruta = file.getSelectedFile();
             RutaFull = file.getSelectedFile().getAbsolutePath();
             System.out.println(RutaFull);
-            
+
             return RutaFull;
         }
         return null;
     }//fin deñ metodo cargar imagen
-        
+
     /**
      * metodo que carga la imagen al bufferedImagen ajustando el tamaño de la
      * ventana
@@ -170,7 +120,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      */
     public void cargaImag() {
         try {
-            String url = agregar_imagen();            
+            String url = agregar_imagen();
             imagen = ImageIO.read(new File(url));
 
             w = imagen.getWidth(); // ancho
@@ -181,12 +131,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 Graphics big = bi2.getGraphics();
                 big.drawImage(imagen, 0, 0, w, h, null);
                 imagen_filtro = copia = imagen = bi2;
+                imagen_Gris = imagen_filtro;
                 //mos_msj("Imagen cargada correctamente");
             }
             this.setSize(w, h);
         } catch (IOException e) {
-            //mos_msj("La imagen no se pudo leer");
-            //System.exit(1);
+            //la imagen no se pudo leer            
         }
     } //fin del metodo cargarimagen
 
@@ -208,27 +158,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 float[] data1 = valores;
                 destino = new ConvolveOp(new Kernel(3, 3, data1), ConvolveOp.EDGE_NO_OP, null);
                 break;
-            case 11:
-                /* aumenta escala usando transform Op e interpolacion BICUBIC */
-                AffineTransform at = AffineTransform.getScaleInstance(x1, y1);
-                destino = new AffineTransformOp(at, AffineTransformOp.TYPE_BICUBIC);
-                break;
-            case 12:
-            /* low pass filter */
-            case 13:
-                /* sharpen */
-                float[] data = (opcion == 12) ? BLUR3x3 : SHARPEN3x3;
-                destino = new ConvolveOp(new Kernel(3, 3, data), ConvolveOp.EDGE_NO_OP, null);
-                break;
-            case 14:
-                /* lookup */
-                byte lut[] = new byte[256];
-                for (int j = 0; j < 256; j++) {
-                    lut[j] = (byte) (256 - j);
-                }
-                ByteLookupTable blut = new ByteLookupTable(0, lut);
-                destino = new LookupOp(blut, null);
-                break;
             default:
         }
         try {
@@ -243,7 +172,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     /**
      * metetodo que pinta sobre el panel
      *
-     * @param g variable de tipo graphics
      */
     @Override
     public void paint(Graphics g) {
@@ -255,24 +183,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 imagen_filtro = imagen;
                 g.drawImage(imagen, 0, 0, null);
                 break;
-            case 1:
-                /*Azul*/
-                LookupTable azul = new ShortLookupTable(0, elimina_rojo);
-                LookupOp az = new LookupOp(azul, null);
-                imagen_filtro = az.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 2:
-                /*Brillo*/
-                RescaleOp rop2 = new RescaleOp(componentes, desplazamientos, null);
-                imagen_filtro = rop2.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
             case 3:
-                /*Gris*/
+                /*Escala Gris*/
                 ColorConvertOp ccop = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
                 imagen_filtro = ccop.filter(imagen, null);
                 g.drawImage(imagen_filtro, 0, 0, null);
+
                 break;
             case 4:
                 /*Girar*/
@@ -282,33 +198,38 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 ((Graphics2D) g).setTransform(a);
                 g.drawImage(imagen_filtro, 0, 0, this);
                 break;
-            case 5:
-                /*Amarillo*/
-                LookupTable amarillo = new ShortLookupTable(0, elimina_verde);
-                LookupOp ye = new LookupOp(amarillo, null);
-                imagen_filtro = ye.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
-            case 6:
-                /*Filtro Rojo*/
-                LookupTable rojo = new ShortLookupTable(0, elimina_azul);
-                LookupOp ro = new LookupOp(rojo, null);
-                imagen_filtro = ro.filter(imagen, null);
-                g.drawImage(imagen_filtro, 0, 0, null);
-                break;
             case 7:
-                /*Efecto Espejo*/
+                /*Efecto Espejo Horizontal*/
                 AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
                 tx.translate(-copia.getWidth(null), 0);
                 AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
                 imagen_filtro = op.filter(imagen_filtro, null);
                 g.drawImage(imagen_filtro, 0, 0, null);
                 break;
+            case 8:
+                /*Efecto Espejo Horizontal*/
+                AffineTransform tx1 = AffineTransform.getScaleInstance(1, -1);
+                tx1.translate(0, -copia.getHeight(null));
+                AffineTransformOp op1 = new AffineTransformOp(tx1, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+                imagen_filtro = op1.filter(imagen_filtro, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+                break;
+            case 12:
+                float brightenFactor = (float) contraste / 100;
+                //System.out.println("" + brightenFactor);
+                BufferedImageOp operacion = new RescaleOp(brightenFactor, 0, null);
+                imagen_filtro = operacion.filter(imagen_Gris, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+                //System.out.println("CAMBIO Contraste");
+                break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
                 agrega_filtro();
                 g.drawImage(imagen_filtro, 0, 0, null);
                 break;
+        }
+        if (opcion != 12) {
+            imagen_Gris = imagen_filtro;
         }
     }// fin de paint
 
@@ -317,8 +238,6 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      * llamando los metodos rotar y translacion final de la clase transformar
      * imagen
      *
-     * @param grados variable de tipo double
-     * @return devuelve un objeto de tipo buffered imagen
      */
     public BufferedImage rotacionImagen(double grados) {
         //crea un objeto  transformar de la clase transformar imagen
@@ -361,6 +280,16 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     }
 
     /**
+     * metodo que modifica el contraste
+     *
+     * @param contraste variable de tipo entero
+     */
+    public void Contraste(int contraste) {
+        this.contraste = contraste;
+        repaint();
+    }
+
+    /**
      * metodo que devuelve el objeto imagen filtro
      *
      * @return imagen_filtro variable de tipo bufferedImage
@@ -368,34 +297,36 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     public BufferedImage getBi() {
         return imagen_filtro;
     }
-/**
- * metodo que recorta una parte de la imagen
- */
-//    public void RecortarImagen() {
-//        recorte = new RecortarImagen(imagen_filtro);
-//        this.label.removeAll();
-//        this.label.add(recorte);
-//
-//        recorte.TamañoRecorte(design.TAncho.getValue());
-//        design.TAncho.setMaximum(imagen_filtro.getHeight());
-//
-//        this.label.repaint();
-//
-//    }
-/**
- * metodo que guarda el recorte 
- */
-//    public void GuardarRecorte() {
-//        String formato = (String) design.Formatos.getSelectedItem();
-//        File saveFile = new File("Recorte." + formato);
-//        JFileChooser chooser = new JFileChooser();
-//        chooser.setSelectedFile(saveFile);
-//        int rFormato = chooser.showSaveDialog(design.Formatos);
-//        if (rFormato == JFileChooser.APPROVE_OPTION) {
-//            saveFile = chooser.getSelectedFile();
-//            recorte.guardar_imagen(saveFile, formato);
-//        }
-//    }
+
+    /**
+     * metodo que recorta una parte de la imagen
+     */
+    public void RecortarImagen() {
+        recorte = new RecortarImagen(imagen_filtro);
+        this.label.removeAll();
+        this.label.add(recorte);
+
+        recorte.TamañoRecorte(Procesar.TAncho.getValue());
+        Procesar.TAncho.setMaximum(imagen_filtro.getHeight());
+
+        this.label.repaint();
+
+    }
+
+    /**
+     * metodo que guarda el recorte
+     */
+    public void GuardarRecorte() {
+        String formato = "png";
+        File saveFile = new File("Recorte." + formato);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setSelectedFile(saveFile);
+        int rFormato = chooser.showSaveDialog(null);
+        if (rFormato == JFileChooser.APPROVE_OPTION) {
+            saveFile = chooser.getSelectedFile();
+            recorte.guardar_imagen(saveFile, formato);
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -403,7 +334,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
 
         label = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         label.setText("jLabel1");
 

@@ -35,8 +35,8 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      * variables globales de tipó bufferedImagen y variables de tipo entero.
      *
      */
-    private BufferedImage imagen, imagen_filtro, copia;
-    int w, h, opcion, grados = 0;
+    private BufferedImage imagen, imagen_filtro, copia, imagen_Gris;
+    int w, h, opcion, grados = 0, contraste = 50;
     double x1, y1;
     String RutaFull;
     RecortarImagen recorte;
@@ -131,6 +131,7 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 Graphics big = bi2.getGraphics();
                 big.drawImage(imagen, 0, 0, w, h, null);
                 imagen_filtro = copia = imagen = bi2;
+                imagen_Gris = imagen_filtro;
                 //mos_msj("Imagen cargada correctamente");
             }
             this.setSize(w, h);
@@ -183,10 +184,12 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 g.drawImage(imagen, 0, 0, null);
                 break;
             case 3:
-                /*Gris*/
+                /*Escala Gris*/
                 ColorConvertOp ccop = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
                 imagen_filtro = ccop.filter(imagen, null);
+                //imagen_Gris = imagen_filtro;
                 g.drawImage(imagen_filtro, 0, 0, null);
+                
                 break;
             case 4:
                 /*Girar*/
@@ -211,6 +214,18 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 AffineTransformOp op1 = new AffineTransformOp(tx1, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
                 imagen_filtro = op1.filter(imagen_filtro, null);
                 g.drawImage(imagen_filtro, 0, 0, null);
+                break;
+            case 12:
+
+                //float brightenFactor = 1.2f;
+                float brightenFactor = (float) contraste / 100;
+                System.out.println("" + brightenFactor);
+
+                BufferedImageOp operacion = new RescaleOp(brightenFactor, 0, null);
+                imagen_filtro = operacion.filter(imagen_Gris, null);
+                g.drawImage(imagen_filtro, 0, 0, null);
+
+                System.out.println("CAMBIO Contraste");
                 break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
@@ -263,6 +278,16 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      */
     public void Grados(int grados) {
         this.grados = grados;
+        repaint();
+    }
+
+    /**
+     * metodo que modifica el contraste
+     *
+     * @param contraste variable de tipo entero
+     */
+    public void Contraste(int contraste) {
+        this.contraste = contraste;
         repaint();
     }
 

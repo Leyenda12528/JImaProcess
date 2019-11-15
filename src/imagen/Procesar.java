@@ -69,6 +69,7 @@ public class Procesar extends javax.swing.JFrame {
         btnEspejoHorizontal = new javax.swing.JMenuItem();
         btnEspejoVertical = new javax.swing.JMenuItem();
         btnGrises = new javax.swing.JMenuItem();
+        btnRuido = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -379,6 +380,15 @@ public class Procesar extends javax.swing.JFrame {
         });
         jMenu2.add(btnGrises);
 
+        btnRuido.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnRuido.setText("Ruido");
+        btnRuido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRuidoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(btnRuido);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -524,6 +534,15 @@ public class Procesar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jsliderContrastStateChanged
 
+    private void btnRuidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRuidoActionPerformed
+        // TODO add your handling code here:
+        if (obj.isVisible()) {
+            //RUIDO
+            obj.r_efecto(1);
+            obj.repaint();
+        }
+    }//GEN-LAST:event_btnRuidoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -568,6 +587,7 @@ public class Procesar extends javax.swing.JFrame {
     private javax.swing.JMenuItem btnGrises;
     private javax.swing.JMenuItem btnNegativo;
     private javax.swing.JMenuItem btnNoneFiltro;
+    private javax.swing.JMenuItem btnRuido;
     private javax.swing.JButton btnSave;
     private javax.swing.JSlider filtro_manual;
     private javax.swing.JButton girar;
@@ -625,7 +645,7 @@ public class Procesar extends javax.swing.JFrame {
             lblLugar.setText(lblLugar.getText() + lines2[3]);
 
         } catch (Exception e) {
-            System.out.println("" + e);
+            System.out.println("->" + e);
         }
     }
 

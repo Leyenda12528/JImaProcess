@@ -1,5 +1,6 @@
 package imagen;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.color.ColorSpace;
@@ -36,10 +37,14 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
      *
      */
     private BufferedImage imagen, imagen_filtro, copia, imagen_Gris;
-    int w, h, opcion, grados = 0, contraste = 50;
+    int w, h, opcion, grados = 0, contraste = 200;
     double x1, y1;
     String RutaFull;
     RecortarImagen recorte;
+    int[][] matrizr, matrizg, matrizb, originalr, originalg, originalb, ruidor, ruidog, ruidob, restar, restag, restab;
+    private BufferedImage Nueva_Imagen, Nueva_Imagen2;
+
+    Color colorAuxiliar;
 
     /**
      * constructor de la clase
@@ -141,6 +146,104 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
     } //fin del metodo cargarimagen
 
     /**
+     * metodo que ayuda al ruido
+     */
+    public void inicializa(BufferedImage ima) {
+        int i, j, w, h, r, g, b;
+
+        Nueva_Imagen = new BufferedImage(ima.getWidth(), ima.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Nueva_Imagen2 = new BufferedImage(ima.getWidth(), ima.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+        w = ima.getWidth();
+        h = ima.getHeight();
+        matrizr = new int[w][h];
+        matrizg = new int[w][h];
+        matrizb = new int[w][h];
+
+        for (i = 0; i < ima.getWidth(); i++) {
+            for (j = 0; j < ima.getHeight(); j++) {
+                colorAuxiliar = new Color(ima.getRGB(i, j));
+                r = colorAuxiliar.getRed();
+                g = colorAuxiliar.getGreen();
+                b = colorAuxiliar.getBlue();
+                matrizr[i][j] = r;
+                matrizg[i][j] = g;
+                matrizb[i][j] = b;
+                Nueva_Imagen.setRGB(i, j, new Color(r, g, b).getRGB());
+
+            }
+        }
+    }
+
+    /**
+     * metodo para el ruido
+     */
+    public BufferedImage Algoritmo(BufferedImage img, double parametro) {
+        int con;
+
+        int difemax = (int) ((1 - parametro) * 255);
+        int[] arreglor = new int[9];
+        int[] arreglog = new int[9];
+        int[] arreglob = new int[9];
+        int aux1, aux2, aux3;
+        for (int i = 1; i < img.getWidth() - 1; i++) {
+            for (int j = 1; j < img.getHeight() - 1; j++) {
+                aux1 = 0;
+                aux2 = 0;
+                aux3 = 0;
+                con = 0;
+                for (int x = -1; x < 2; x++) {
+                    for (int y = -1; y < 2; y++) {
+                        arreglor[con] = matrizr[i][j] - matrizr[i + x][j + y];
+                        arreglog[con] = matrizg[i][j] - matrizg[i + x][j + y];
+                        arreglob[con] = matrizb[i][j] - matrizb[i + x][j + y];
+
+                        con++;
+
+                    }
+                }
+                int maxr = calcula_maximo(arreglor);
+                int maxg = calcula_maximo(arreglog);
+                int maxb = calcula_maximo(arreglob);
+
+                if (maxr > difemax) {
+                    aux1 = Math.abs(matrizr[i][j] + (difemax - maxr));
+
+                } else {
+                    aux1 = matrizr[i][j];
+                }
+                if (maxg > difemax) {
+                    aux2 = Math.abs(matrizg[i][j] + (difemax - maxg));
+                } else {
+                    aux2 = matrizg[i][j];
+                }
+                if (maxb > difemax) {
+                    aux3 = Math.abs(matrizb[i][j] + (difemax - maxb));
+                } else {
+                    aux3 = matrizb[i][j];
+                }
+                img.setRGB(i, j, new Color(aux1, aux2, aux3).getRGB());
+            }
+        }
+
+        return img;
+    }//fin algoritmo
+
+    public int calcula_maximo(int valores[]) {
+        int maximo = 0;
+        int indice;
+
+        for (indice = 0; indice < valores.length; indice++) {
+            if (Math.abs(valores[indice]) > Math.abs(maximo)) {
+                maximo = valores[indice];
+
+            }
+        }
+
+        return maximo;
+    }
+
+    /**
      * metodo que aplica filtros sobre la imagen original
      */
     public void agrega_filtro() {
@@ -215,12 +318,18 @@ public class imagen extends javax.swing.JFrame implements ActionListener {
                 g.drawImage(imagen_filtro, 0, 0, null);
                 break;
             case 12:
+                /*Cambiar el Contraste*/
                 float brightenFactor = (float) contraste / 100;
                 //System.out.println("" + brightenFactor);
                 BufferedImageOp operacion = new RescaleOp(brightenFactor, 0, null);
                 imagen_filtro = operacion.filter(imagen_Gris, null);
                 g.drawImage(imagen_filtro, 0, 0, null);
                 //System.out.println("CAMBIO Contraste");
+                break;
+            case 1:
+                inicializa(imagen);
+                imagen_filtro = Algoritmo(Nueva_Imagen, 0.9);
+                g.drawImage(imagen_filtro, 0, 0, null);
                 break;
             default:
                 //apĺica los filtros  que estan dentro del metodo agrega_filtro
